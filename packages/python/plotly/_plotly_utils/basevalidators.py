@@ -689,6 +689,9 @@ class EnumeratedValidator(BaseValidator):
         if v is None:
             # Pass None through
             pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
+            pass
         elif self.array_ok and is_array(v):
             v_replaced = [self.perform_replacemenet(v_el) for v_el in v]
 
@@ -850,6 +853,9 @@ class NumberValidator(BaseValidator):
         if v is None:
             # Pass None through
             pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
+            pass
         elif self.array_ok and is_homogeneous_array(v):
             np = get_module("numpy")
             try:
@@ -977,6 +983,9 @@ class IntegerValidator(BaseValidator):
     def validate_coerce(self, v):
         if v is None:
             # Pass None through
+            pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
             pass
         elif self.array_ok and is_homogeneous_array(v):
             np = get_module("numpy")
@@ -1132,6 +1141,9 @@ class StringValidator(BaseValidator):
     def validate_coerce(self, v):
         if v is None:
             # Pass None through
+            pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
             pass
         elif self.array_ok and is_array(v):
 
@@ -1434,6 +1446,9 @@ class ColorValidator(BaseValidator):
     def validate_coerce(self, v, should_raise=True):
         if v is None:
             # Pass None through
+            pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
             pass
         elif self.array_ok and is_homogeneous_array(v):
             v = copy_to_readonly_numpy_array(v)
@@ -1786,6 +1801,9 @@ class AngleValidator(BaseValidator):
         if v is None:
             # Pass None through
             pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
+            pass
         elif self.array_ok and is_homogeneous_array(v):
             try:
                 v_array = copy_to_readonly_numpy_array(v, force_numeric=True)
@@ -1972,6 +1990,9 @@ class FlaglistValidator(BaseValidator):
         if v is None:
             # Pass None through
             pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
+            pass
         elif self.array_ok and is_array(v):
 
             # Coerce individual strings
@@ -2030,6 +2051,9 @@ class AnyValidator(BaseValidator):
     def validate_coerce(self, v):
         if v is None:
             # Pass None through
+            pass
+        if is_typed_array_spec(v):
+            # Pass typed array spec through
             pass
         elif self.array_ok and is_homogeneous_array(v):
             v = copy_to_readonly_numpy_array(v, kind="O")
