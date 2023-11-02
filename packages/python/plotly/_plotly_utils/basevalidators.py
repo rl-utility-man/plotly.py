@@ -291,6 +291,10 @@ def is_typed_array_spec(v):
     return isinstance(v, dict) and "bdata" in v
 
 
+def is_none_or_typed_array_spec(v):
+    return v is None or is_typed_array_spec(v)
+
+
 def is_simple_array(v):
     """
     Return whether a value is considered to be an simple array
@@ -485,11 +489,7 @@ class DataArrayValidator(BaseValidator):
 
     def validate_coerce(self, v):
 
-        if v is None:
-            # Pass None through
-            pass
-        elif is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif is_homogeneous_array(v):
             v = to_typed_array_spec(v)
@@ -686,11 +686,7 @@ class EnumeratedValidator(BaseValidator):
         return False
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_array(v):
             v_replaced = [self.perform_replacemenet(v_el) for v_el in v]
@@ -734,8 +730,7 @@ class BooleanValidator(BaseValidator):
         )
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
+        if is_none_or_typed_array_spec(v):
             pass
         elif not isinstance(v, bool):
             self.raise_invalid_val(v)
@@ -759,8 +754,7 @@ class SrcValidator(BaseValidator):
         )
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
+        if is_none_or_typed_array_spec(v):
             pass
         elif isinstance(v, str):
             pass
@@ -850,11 +844,7 @@ class NumberValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_homogeneous_array(v):
             np = get_module("numpy")
@@ -981,11 +971,7 @@ class IntegerValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_homogeneous_array(v):
             np = get_module("numpy")
@@ -1080,7 +1066,7 @@ class StringValidator(BaseValidator):
         Convert a value to a string if it's not None, a string,
         or a unicode (on Python 2).
         """
-        if v is None or isinstance(v, str):
+        if is_none_or_typed_array_spec(v) or isinstance(v, str):
             return v
         else:
             return str(v)
@@ -1139,11 +1125,7 @@ class StringValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_array(v):
 
@@ -1444,11 +1426,7 @@ class ColorValidator(BaseValidator):
         return valid_color_description
 
     def validate_coerce(self, v, should_raise=True):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_homogeneous_array(v):
             v = copy_to_readonly_numpy_array(v)
@@ -1592,8 +1570,7 @@ class ColorlistValidator(BaseValidator):
 
     def validate_coerce(self, v):
 
-        if v is None:
-            # Pass None through
+        if is_none_or_typed_array_spec(v):
             pass
         elif is_array(v):
             validated_v = [
@@ -1697,7 +1674,7 @@ class ColorscaleValidator(BaseValidator):
     def validate_coerce(self, v):
         v_valid = False
 
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             v_valid = True
         elif isinstance(v, str):
             v_lower = v.lower()
@@ -1756,7 +1733,7 @@ class ColorscaleValidator(BaseValidator):
 
     def present(self, v):
         # Return-type must be immutable
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             return None
         elif isinstance(v, str):
             return v
@@ -1798,11 +1775,7 @@ class AngleValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_homogeneous_array(v):
             try:
@@ -1875,7 +1848,7 @@ class SubplotidValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             pass
         elif not isinstance(v, str):
             self.raise_invalid_val(v)
@@ -1987,11 +1960,7 @@ class FlaglistValidator(BaseValidator):
             return None
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_array(v):
 
@@ -2049,11 +2018,7 @@ class AnyValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
-            pass
-        if is_typed_array_spec(v):
-            # Pass typed array spec through
+        if is_none_or_typed_array_spec(v):
             pass
         elif self.array_ok and is_homogeneous_array(v):
             v = copy_to_readonly_numpy_array(v, kind="O")
@@ -2261,8 +2226,7 @@ class InfoArrayValidator(BaseValidator):
         return val
 
     def validate_coerce(self, v):
-        if v is None:
-            # Pass None through
+        if is_none_or_typed_array_spec(v):
             return None
         elif not is_array(v):
             self.raise_invalid_val(v)
@@ -2325,7 +2289,7 @@ class InfoArrayValidator(BaseValidator):
         return v
 
     def present(self, v):
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             return None
         else:
             if (
@@ -2489,7 +2453,7 @@ class ImageUriValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v):
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             pass
         elif isinstance(v, str):
             # Future possibilities:
@@ -2588,7 +2552,7 @@ class CompoundValidator(BaseValidator):
         return desc
 
     def validate_coerce(self, v, skip_invalid=False, _validate=True):
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             v = self.data_class()
 
         elif isinstance(v, dict):
@@ -2674,7 +2638,7 @@ class CompoundArrayValidator(BaseValidator):
 
     def validate_coerce(self, v, skip_invalid=False):
 
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             v = []
 
         elif isinstance(v, (list, tuple)):
@@ -2770,7 +2734,7 @@ class BaseDataValidator(BaseValidator):
         # Histogram2dContour trace.
         from plotly.graph_objs import Histogram2dcontour
 
-        if v is None:
+        if is_none_or_typed_array_spec(v):
             v = []
         else:
             if not isinstance(v, (list, tuple)):
