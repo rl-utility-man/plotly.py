@@ -55,6 +55,27 @@ fig.write_html("path/to/file.html")
 
 By default, the resulting HTML file is a fully self-contained HTML file which can be uploaded to a web server or shared via email or other file-sharing mechanisms. The downside to this approach is that the file is very large (5Mb+) because it contains an inlined copy of the Plotly.js library required to make the figure interactive. This can be controlled via the `include_plotlyjs` argument (see below).
 
+### Inserting Plotly Output into HTML using a Jinja2 Template
+
+You can insert Plotly output and text related to your data into HTML templates using Jinja2.   First create an HTML template file containing a variable like <pre>{{ fig }}</pre>.  Then use the following Python to replace <pre>{{ fig }}</pre>  with HTML that will display the Plotly figure "fig":
+
+
+```
+from jinja2 import Template
+
+#standard imports and code to create the Plotly figure fig omitted, but would go here.  
+
+output_html_path="path/to/output.html"
+input_template_path = "path/to/template.html"
+
+plotly_jinja_data = {"plot":fig.to_html(full_html=False)}  #consider also defining the include_plotlyjs parameter to point to your Plotly.js"
+
+with open(output_html_path, "w") as output_file:
+    with open(input_template_path) as template_file:
+        j2_template = Template(template_file.read())
+        output_file.write(j2_template.render(plotly_jinja_data))
+```
+
 
 ### HTML export in Dash
 
